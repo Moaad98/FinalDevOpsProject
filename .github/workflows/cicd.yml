@@ -25,6 +25,6 @@ jobs:
     - name: Build, tag, and push Docker image
       run: |
         aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/k5u0o7b3
-        #docker build -t moaad-namegen .
+        docker build -t moaad-namegen .
         docker tag moaad-pacman:latest public.ecr.aws/k5u0o7b3/moaad-namegen:latest
         docker push public.ecr.aws/k5u0o7b3/moaad-namegen:latest
