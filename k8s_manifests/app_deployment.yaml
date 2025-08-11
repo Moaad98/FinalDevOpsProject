@@ -21,4 +21,5 @@ spec:
         - containerPort: 8080
         env:
           - name: MONGODB_URL
-            value: mongodb://genuser:password@mongo:27017/namegen
+            value: mongodb://mongo:27017/namegen
+
