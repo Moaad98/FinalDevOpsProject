@@ -8,7 +8,7 @@ metadata:
 spec:
  type: LoadBalancer
  selector:
-    app: pacman
+    app: namegen
  ports:
     - protocol: TCP
       port: 80
