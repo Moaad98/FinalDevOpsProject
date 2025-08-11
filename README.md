@@ -36,3 +36,14 @@ kubectl apply -f k8s_manifests/
 # 5. (Optional) Verify deployment status
 kubectl get pods
 kubectl get svc
+```
+| Diagram |   |   |
+|---------|-------|-------|
+| ![Diagram](ScreenShots/6c280434-609a-406a-9f61-ae2ef5215fa9.png) | ![1](ScreenShots/1) | ![2](ScreenShots/2) |
+
+|  |   |   |   |
+|-------|-------|-------|-------|
+| ![3](ScreenShots/3) | ![4](ScreenShots/4) | ![5](ScreenShots/5) | ![6](ScreenShots/6) |
+
+
+
