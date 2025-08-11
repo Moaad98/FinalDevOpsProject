@@ -4,13 +4,13 @@ FROM node:18-alpine
 WORKDIR /app
 
 # Copy dependency definitions
-COPY package.json package-lock.json ./
+COPY namegen-main/package.json namegen-main/package-lock.json ./
 
 # Install dependencies
 RUN npm ci --only=production
 
 # Copy application code
-COPY . .
+COPY namegen-main/ ./
 
 # Expose the application port
 EXPOSE 8080
