@@ -30,7 +30,7 @@ jobs:
         docker push public.ecr.aws/k5u0o7b3/moaad-namegen:latest
     - name: Deploy to EKS
       run: |
-          aws eks --region us-east-1 update-kubeconfig --name my-cluster
+          aws eks --region us-east-1 update-kubeconfig --name rng-cluster
           kubectl apply -f k8s_manifests/app_deployment.yaml 
           kubectl apply -f k8s_manifests/app_svc.yaml 
           kubectl rollout status deployment/namegen-app
