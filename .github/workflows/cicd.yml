@@ -39,3 +39,4 @@ jobs:
           kubectl apply -f k8s_manifests/db_svc.yaml
           kubectl apply -f k8s_manifests/db_sc.yaml
           kubectl rollout status statefulset/mongo
+          
