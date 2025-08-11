@@ -1,4 +1,3 @@
-
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -7,7 +6,7 @@ metadata:
     app: mongo
 spec:
   serviceName: "mongo"
-  replicas: 2
+  replicas: 1  # Changed from 2 to 1 - MongoDB replica sets need special config
   selector:
     matchLabels:
       app: mongo
@@ -21,15 +20,44 @@ spec:
         image: mongo:3.6
         ports:
         - containerPort: 27017
+        env:
+        - name: MONGO_INITDB_ROOT_USERNAME
+          value: "admin"
+        - name: MONGO_INITDB_ROOT_PASSWORD
+          value: "adminpass"
+        - name: MONGO_INITDB_DATABASE
+          value: "namegen"
         volumeMounts:
         - name: mongo-persistent-storage
           mountPath: /data/db
+        - name: mongo-init
+          mountPath: /docker-entrypoint-initdb.d
+        readinessProbe:
+          exec:
+            command:
+            - mongo
+            - --eval
+            - "db.adminCommand('ping')"
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        livenessProbe:
+          exec:
+            command:
+            - mongo
+            - --eval
+            - "db.adminCommand('ping')"
+          initialDelaySeconds: 30
+          periodSeconds: 20
+      volumes:
+      - name: mongo-init
+        configMap:
+          name: mongo-init
   volumeClaimTemplates:
   - metadata:
       name: mongo-persistent-storage
     spec:
       accessModes: [ "ReadWriteOnce" ]
-      storageClassName: auto-ebs-sc
+      storageClassName: gp3 
       resources:
         requests:
           storage: 5Gi
