@@ -38,7 +38,7 @@ eksctl create cluster -f ./EKS_Cluster/cluster.yaml
 eksctl delete cluster -f ./EKS_Cluster/cluster.yaml
 ```
 ## 🖼 Architecture & CI/CD Pipeline Diagram
-![Diagram](ScreenShots/6c280434-609a-406a-9f61-ae2ef5215fa9.png)  
+![Diagram](ScreenShots/231.jpg)  
 
 ## 🌐 Application in Action
 ![Website App](ScreenShots/1.png)  
