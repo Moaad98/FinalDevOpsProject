@@ -5,64 +5,73 @@ on:
     branches: [main]
 
 jobs:
-  CICD:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      # 1. Checkout source code
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v4
-      with:
-        aws-access-key-id: ${{ secrets.ACCESS_KEY }}
-        aws-secret-access-key: ${{ secrets.SECRET_ACCESS_KEY }}
-        aws-region: us-east-1
+      # 2. Configure AWS access
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
 
-    - name: Login to Amazon ECR
-      uses: aws-actions/amazon-ecr-login@v2
+      # 3. Login to container registry
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
 
-    - name: Build, tag, and push Docker image
-      run: |
-        echo "Building Docker image..."
-        docker build -t moaad-namegen .
-        echo "Tagging Docker image..."
-        docker tag moaad-namegen:latest public.ecr.aws/k5u0o7b3/moaad-namegen:latest
-        echo "Pushing Docker image to ECR..."
-        docker push public.ecr.aws/k5u0o7b3/moaad-namegen:latest
-        echo "Docker image pushed successfully."
+      # 4. Build and push Docker image
+      - name: Build and push Docker image
+        run: |
+          echo "Logging in to public ECR..."
+          aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/k5u0o7b3
+          
+          echo "Building Docker image..."
+          docker build -t moaad-namegen .
+          
+          echo "Tagging and pushing to ECR..."
+          docker tag moaad-namegen:latest public.ecr.aws/k5u0o7b3/moaad-namegen:latest
+          docker push public.ecr.aws/k5u0o7b3/moaad-namegen:latest
 
-    - name: Deploy MongoDB StatefulSet and related resources
-      run: |
-        echo "Updating kubeconfig to access EKS cluster..."
-        aws eks --region us-east-1 update-kubeconfig --name rng-cluster
+      # 5. Configure kubectl for EKS cluster
+      - name: Configure kubectl for EKS
+        run: |
+          echo "Updating kubeconfig for EKS cluster..."
+          aws eks --region us-east-1 update-kubeconfig --name rng-cluster
 
-        echo "Applying MongoDB StorageClass..."
-        kubectl apply -f k8s_manifests/db_sc.yaml
+      # 6. Deploy database components first
+      - name: Deploy database
+        run: |
+          echo "Deploying database storage class..."
+          kubectl apply -f k8s_manifests/db_sc.yaml
+          
+          echo "Deploying database..."
+          kubectl apply -f k8s_manifests/db_deployment.yaml
+          kubectl apply -f k8s_manifests/db_svc.yaml
+          
+          echo "Waiting for database to be ready..."
+          kubectl rollout status statefulset/mongo
 
-        echo "Applying MongoDB Service..."
-        kubectl apply -f k8s_manifests/db_svc.yaml
+      # 7. Deploy application components
+      - name: Deploy application
+        run: |
+          echo "Deploying application..."
+          kubectl apply -f k8s_manifests/app_deployment.yaml 
+          kubectl apply -f k8s_manifests/app_svc.yaml
+          
+          echo "Waiting for application to be ready..."
+          kubectl rollout status deployment/namegen-app
 
-        echo "Applying MongoDB StatefulSet deployment..."
-        kubectl apply -f k8s_manifests/db_deployment.yaml
-
-        echo "Waiting for MongoDB StatefulSet rollout to complete..."
-        kubectl rollout status statefulset/mongo
-
-        echo "MongoDB deployed successfully."
-
-    - name: Deploy application to EKS
-      run: |
-        echo "Deploying application Service..."
-        kubectl apply -f k8s_manifests/app_svc.yaml
-
-        echo "Deploying application Deployment..."
-        kubectl apply -f k8s_manifests/app_deployment.yaml
-
-        echo "Waiting for application Deployment rollout to complete..."
-        kubectl rollout status deployment/namegen-app
-
-        echo "Application deployed successfully."
-
-        echo "Getting application Service details..."
-        kubectl get svc namegen-svc -o wide
+      # 8. Verify deployment status
+      - name: Verify deployment
+        run: |
+          echo "Checking application service..."
+          kubectl get svc namegen-svc -o wide
+          
+          echo "Deployment verification complete!"
