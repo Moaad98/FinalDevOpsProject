@@ -37,13 +37,14 @@ kubectl apply -f k8s_manifests/
 kubectl get pods
 kubectl get svc
 ```
-| Diagram |   |   |
-|---------|-------|-------|
-| ![Diagram](ScreenShots/6c280434-609a-406a-9f61-ae2ef5215fa9.png) | ![1](ScreenShots/1.png) | ![2](ScreenShots/2.png) |
+## Architecture & CI/CD Pipeline Diagram
+![Diagram](ScreenShots/6c280434-609a-406a-9f61-ae2ef5215fa9.png)  
 
-|  |   |   |   |
-|-------|-------|-------|-------|
-| ![3](ScreenShots/3.png) |  ![5](ScreenShots/5.png) | ![6](ScreenShots/6.png) |
+## Application in Action
+![Website App](ScreenShots/1.png)  
 
+## Grafana Monitoring
+![Grafana Dashboard 1](ScreenShots/5.png)  
+![Grafana Dashboard 2](ScreenShots/6.png)  
 
 
