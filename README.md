@@ -43,9 +43,6 @@ kubectl get svc
 ## Application in Action
 ![Website App](ScreenShots/1.png)  
 
-## Additional Application View
-![Additional View](ScreenShots/2.png)  
-
 ## Grafana Monitoring
 ![Grafana Dashboard 1](ScreenShots/5.png)  
 ![Grafana Dashboard 2](ScreenShots/6.png)  
