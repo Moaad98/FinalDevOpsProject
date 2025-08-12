@@ -1,49 +1,48 @@
-# FinalDevOpsProject
+# 🚀 FinalDevOpsProject
 
-## Overview
-FinalDevOpsProject is a complete DevOps pipeline implementation for building, testing, and deploying a containerized application to a Kubernetes cluster (EKS).  
-It demonstrates Infrastructure as Code, CI/CD automation, and Kubernetes orchestration using GitHub Actions.
+## 📌 Overview
+**FinalDevOpsProject** is a fully automated **DevOps pipeline** for building, testing, and deploying a containerized application on **AWS EKS**.  
+It showcases:
+- 🏗 **Infrastructure as Code** (IaC)
+- ⚙ **CI/CD Automation** with GitHub Actions
+- ☸ **Kubernetes Orchestration** on Amazon EKS
 
-## Architecture & Components
-- **EKS_Cluster/** – Infrastructure code for creating an AWS EKS Kubernetes cluster.
-- **k8s_manifests/** – Kubernetes YAML manifests (Deployments, Services, ConfigMaps, etc.).
-- **namegen-main/** – Application source code.
-- **Dockerfile** – Instructions for building the application container image.
-- **.github/workflows/** – GitHub Actions CI/CD automation pipelines.
+---
 
-## Prerequisites
-Before running the project, you’ll need:
-- Docker installed
-- AWS CLI configured with EKS permissions
-- kubectl installed & configured for your EKS cluster
-- GitHub repository access with Actions enabled
+## 🛠 Architecture & Components
+- 📂 **EKS_Cluster/** – IaC files for creating the EKS cluster.
+- 📂 **k8s_manifests/** – Kubernetes YAML manifests (Deployments, Services, StatefulSets, etc.).
+- 📂 **namegen-main/** – Application source code.
+- 📄 **Dockerfile** – Container image build instructions.
+- 📂 **.github/workflows/** – GitHub Actions CI/CD pipelines.
 
-## Bash Commands
+---
 
-```bash
-# 1. Build the Docker image
-docker build -t namegen-app:latest .
+## 📋 Prerequisites
+Before running the project, ensure you have:
+- 🐳 **Docker** installed
+- ☁ **AWS CLI** configured with EKS permissions
+- 🔧 **kubectl** installed & connected to your EKS cluster
+- 🔑 GitHub repository with **Actions enabled**
 
-# 2. Tag the Docker image for your registry
-docker tag namegen-app:latest <your-registry>/namegen-app:latest
+---
 
-# 3. Push the image to your registry (Docker Hub, AWS ECR, etc.)
-docker push <your-registry>/namegen-app:latest
+## 💻 Cluster Management Commands
 
-# 4. Apply Kubernetes manifests to deploy the app
-kubectl apply -f k8s_manifests/
 
-# 5. (Optional) Verify deployment status
-kubectl get pods
-kubectl get svc
-```
-## Architecture & CI/CD Pipeline Diagram
+# 🚀 Create the EKS cluster
+eksctl create cluster -f ./EKS_Cluster/cluster.yaml
+
+# 🗑 Delete the EKS cluster when done
+eksctl delete cluster -f ./EKS_Cluster/cluster.yaml
+
+## 🖼 Architecture & CI/CD Pipeline Diagram
 ![Diagram](ScreenShots/6c280434-609a-406a-9f61-ae2ef5215fa9.png)  
 
-## Application in Action
+## 🌐 Application in Action
 ![Website App](ScreenShots/1.png)  
 
-## Grafana Monitoring
+## 📊 Grafana Monitoring
 ![Grafana Dashboard 1](ScreenShots/5.png)  
 ![Grafana Dashboard 2](ScreenShots/6.png)  
 
