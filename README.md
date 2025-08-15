@@ -31,11 +31,11 @@ Before running the project, ensure you have:
 
 
 
-# 🚀 Create the EKS cluster
+🚀 Create the EKS cluster
 ```bash
 eksctl create cluster -f ./EKS_Cluster/cluster.yaml
 ```
-# 🗑 Delete the EKS cluster when done
+🗑 Delete the EKS cluster when done
 ```bash
 eksctl delete cluster -f ./EKS_Cluster/cluster.yaml
 ```
