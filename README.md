@@ -29,12 +29,14 @@ Before running the project, ensure you have:
 
 ## 💻 Cluster Management Commands
 
-```bash
+
 
 # 🚀 Create the EKS cluster
+```bash
 eksctl create cluster -f ./EKS_Cluster/cluster.yaml
-
+```
 # 🗑 Delete the EKS cluster when done
+```bash
 eksctl delete cluster -f ./EKS_Cluster/cluster.yaml
 ```
 ## 🖼 Architecture & CI/CD Pipeline Diagram
